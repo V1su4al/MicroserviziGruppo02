@@ -69,7 +69,17 @@ namespace MicroserviziGr02.Service
         {
             using var connection = new NpgsqlConnection(_connectionString);
             string query = """
-                
+                INSERT INTO 
+                (
+                  Follower,
+                  Followed
+                                    
+                  )                
+                   VALUES
+                (                  
+                  @Follower,
+                  @Followed
+                )
                 """;
 
             return connection.Query<Post>(query, new { Id = UserId });

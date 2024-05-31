@@ -7,10 +7,10 @@ CREATE TABLE Users (
 );
 
 -- Tabella Categories
-CREATE TABLE Categories (
+CREATE TABLE Category(
     Id SERIAL PRIMARY KEY,
     Name VARCHAR(256) NOT NULL
-);
+)
 
 CREATE TABLE Posts (
     Id SERIAL PRIMARY KEY,

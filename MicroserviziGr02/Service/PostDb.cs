@@ -44,10 +44,10 @@ namespace MicroserviziGr02.Service
         {
             using var connection = new NpgsqlConnection(_connectionString);
             string query = """                               
-                INSERT INTO Category (CategoryName)
-                VALUES (@CategoryName);                
+                INSERT INTO category (Name)
+                VALUES (@Name);                
                 """;
-            connection.Execute(query, CategoryName);
+            connection.Execute(query, new { Name = CategoryName });
         }
 
     }
