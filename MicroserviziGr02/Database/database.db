@@ -1,0 +1,41 @@
+-- Active: 1712821913708@@127.0.0.1@5432@MicroserviziGruppo2@public
+
+CREATE TABLE Users (
+    Id SERIAL PRIMARY KEY,
+    Username VARCHAR(256) NOT NULL,
+    PasswordHash VARCHAR(256) NOT NULL
+);
+
+-- Tabella Categories
+CREATE TABLE Categories (
+    Id SERIAL PRIMARY KEY,
+    Name VARCHAR(256) NOT NULL
+);
+
+CREATE TABLE Posts (
+    Id SERIAL PRIMARY KEY,
+    Url VARCHAR(2048) NOT NULL,
+    CreatedAt TIMESTAMP NOT NULL,
+    UserId INT REFERENCES Users(Id)
+);
+
+-- Tabella Likes
+CREATE TABLE Likes (
+    Id SERIAL PRIMARY KEY,
+    UserId INT REFERENCES Users(Id),
+    PostId INT REFERENCES Posts(Id)
+);
+
+-- Tabella Follows
+CREATE TABLE Follows (
+    Id SERIAL PRIMARY KEY,
+    FollowerId INT REFERENCES Users(Id),
+    FolloweeId INT REFERENCES Users(Id)
+);
+
+-- Tabella di associazione PostCategories
+CREATE TABLE PostCategories (
+    PostId INT REFERENCES Posts(Id),
+    CategoryId INT REFERENCES Categories(Id),
+    PRIMARY KEY (PostId, CategoryId)
+);

@@ -1,3 +1,8 @@
+using System.Reflection.Metadata;
+using MicroserviziGr02.Model;
+
+using MicroserviziGr02.Service;
+using Microsoft.Extensions.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,30 +20,69 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Dependeny Injection
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
+
+app.MapPost("/InsertUser", (User user) =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var data = new UserDb();
+    data.CreateUser(user);
 })
-.WithName("GetWeatherForecast")
+.WithName("afaf")
+.WithOpenApi();
+
+
+app.MapGet("/GetUsersPost/{id}", (int id) =>    // id deve essere uguale anche a quello dentro le graffe
+{
+    var data = new UserDb();
+   var posts= data.GetUserPost(id);
+    return posts;
+}).WithName("GetProductById")
+  .WithOpenApi();
+
+app.MapPost("/InsertPost", (Post post) =>
+{
+    var data = new PostDb();
+    data.CreatePost(post);
+})
+.WithOpenApi();
+
+
+app.MapGet("/GetOrderPost", () =>
+{
+    var data = new PostDb();
+   var orderedpost= data.GetListAsync();
+    return orderedpost;
+}).WithOpenApi();
+
+
+app.MapPost("/InsertLike", (Likes likes) =>
+{
+    var data = new PostDb();
+    data.LikesPost(likes);
+})
+.WithOpenApi();
+app.MapPost("/Follow", (Follow follow) =>
+{
+    var data = new UserDb();
+    data.Following(follow);
+})
+.WithOpenApi();
+
+//app.MapGet("/GetUserLikedPost/{id}", (int id) =>    // id deve essere uguale anche a quello dentro le graffe
+//{
+//    var data = new UserDb();
+//    var posts = data.GetUserPost(id);
+//    return posts;
+//}).WithName("GetProductById")
+//  .WithOpenApi();
+
+app.MapPost("/Category", (string CategoryName) =>
+{
+    var data = new PostDb();
+    data.InsertCategory(CategoryName);
+})
 .WithOpenApi();
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

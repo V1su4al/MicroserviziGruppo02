@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\MicroserviziGr02.props" />
+</Project>
